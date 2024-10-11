@@ -20,20 +20,24 @@ def thread1_routine():
     lock2.release()
     lock1.release()
 
+    print("Thread 1: Released both locks.")
+
 # Function for the second thread
 def thread2_routine():
-    print("Thread 2: Trying to acquire Lock 2...")
-    lock2.acquire()
-    print("Thread 2: Acquired Lock 2, now waiting for Lock 1...")
+    print("Thread 2: Trying to acquire Lock 1...")  # Acquiring Lock 1 first to avoid deadlock
+    lock1.acquire()
+    print("Thread 2: Acquired Lock 1, now waiting for Lock 2...")
     time.sleep(1)  # Simulating some processing time
 
-    print("Thread 2: Trying to acquire Lock 1...")
-    lock1.acquire()
-    print("Thread 2: Acquired Lock 1!")
+    print("Thread 2: Trying to acquire Lock 2...")
+    lock2.acquire()
+    print("Thread 2: Acquired Lock 2!")
 
     # Release locks after work is done
-    lock1.release()
     lock2.release()
+    lock1.release()
+
+    print("Thread 2: Released both locks.")
 
 # Create two threads
 thread1 = threading.Thread(target=thread1_routine)
